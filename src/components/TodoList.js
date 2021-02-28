@@ -4,7 +4,10 @@ import TodoForm from "./TodoForm";
 
 export default class TodoList extends React.Component {
   state = {
-    todos: [],
+    todos:
+      localStorage.getItem("localTodos") != null
+        ? JSON.parse(localStorage.getItem("localTodos"))
+        : [],
     todoToShow: "all",
     toggleAllComplete: true,
   };
@@ -50,6 +53,8 @@ export default class TodoList extends React.Component {
   render() {
     let todos = [];
 
+    localStorage.setItem("localTodos", JSON.stringify(this.state.todos));
+
     if (this.state.todoToShow === "all") {
       todos = this.state.todos;
     } else if (this.state.todoToShow === "active") {
@@ -60,7 +65,6 @@ export default class TodoList extends React.Component {
     return (
       <div>
         <TodoForm onSubmit={this.addTodo} />
-        {/* {JSON.stringify(this.state.todos)} */}
         {todos.map((todo) => (
           <Todo
             key={todo.id}
